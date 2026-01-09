@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class Movment : MonoBehaviour
-{
+//public class Movment : MonoBehaviour
+/*{
     Rigidbody rb; 
 
     [Header("Movment")]
@@ -97,8 +97,18 @@ public class Movment : MonoBehaviour
         }
         else if (grounded && Input.GetKey(sprintKey) && !Input.GetKey(crouchKey))
         {
-            //st
+            state = MovmentState.sprinting;
+            moveSpeed = sprintSpeed; 
+        }
+        else if (grounded)
+        {
+            state = MovmentState.walking;
+            moveSpeed = walkSpeed; 
+        }
+        else
+        {
+            state = MovmentState.air; 
         }
     }
 
-}
+}*/
