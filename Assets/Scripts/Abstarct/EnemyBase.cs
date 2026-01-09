@@ -17,7 +17,9 @@ public abstract class EnemyBase: MonoBehaviour
     public float attackTimer;
     [Header("Navmesh")]
     public NavMeshAgent agent;
-    public GameObject player;
+    public GameObject player; 
+    [Header("Line of Sight")]
+    public LayerMask obstructionMask;
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
