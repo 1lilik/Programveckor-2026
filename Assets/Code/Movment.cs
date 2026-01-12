@@ -1,7 +1,7 @@
 using UnityEngine;
 
-//public class Movment : MonoBehaviour
-/*{
+public class Movment : MonoBehaviour
+{
     Rigidbody rb; 
 
     [Header("Movment")]
@@ -11,7 +11,7 @@ using UnityEngine;
     public float jumpForce;
     public float jumpCooldown;
     public float groundDrag;
-    public float airMulitpiler;
+    public float airMultipiler;
     public float startYScale; 
 
     [Header("Ground Check")]
@@ -68,13 +68,13 @@ using UnityEngine;
     private void PlayerInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("VerticalInput");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && jumpReady)
+        if (Input.GetKey(jumpKey) && jumpReady && grounded)
         {
             jumpReady = false;
             Jump();
-            InvokeRepeating(nameof(ResetJump), jumpCooldown)
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
 
         if (Input.GetKeyDown(crouchKey))
@@ -90,7 +90,7 @@ using UnityEngine;
 
     private void StateHandler()
     {
-        if (grounded && Input.GetKeyDown(crouchKey))
+        if (grounded && Input.GetKey(crouchKey))
         {
             state = MovmentState.crouching;
             moveSpeed = crouchSpeed; 
@@ -111,4 +111,54 @@ using UnityEngine;
         }
     }
 
-}*/
+    private void MovePlayer()
+    {
+        moveDiraction = looking.forward * verticalInput + looking.right * horizontalInput;
+
+        if (grounded)
+        {
+            rb.AddForce(moveDiraction.normalized * moveSpeed * 10f, ForceMode.Force);
+        }
+        else
+        {
+            rb.AddForce(moveDiraction.normalized * moveSpeed * 10f * airMultipiler, ForceMode.Force);
+        }
+    }
+
+    private void SpeedControl()
+    {
+        Vector3 flatvel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        if (flatvel.magnitude > moveSpeed)
+        {
+            Vector3 limitedVel = flatvel.normalized * moveSpeed;
+            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+        }
+    }
+
+    private void Jump()
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void ResetJump()
+    {
+        jumpReady = true;
+    }
+
+    private void StartCrouch()
+    {
+        if(state != MovmentState.air)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(-transform.up * 10);
+        }
+    }
+
+    private void StopCrouch()
+    {
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+    }
+
+}
