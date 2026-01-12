@@ -8,15 +8,15 @@ public class HealthbarTEST : MonoBehaviour
     public int currentHealth;
 
 
-    //ta med i playerscript, kopplar till healthbar script
-    public HealthBar healthBar;
+    //ta med i playerscript, kopplar till UI script
+    public UIScript uiScript;
 
     
     void Start()
     {
         currentHealth = maxHealth;
-        //ta med i playerscript, kopplar till healthbar script
-        healthBar.SetMaxHealth(maxHealth);
+        //ta med i playerscript, kopplar till UI script
+        uiScript.SetMaxHealth(maxHealth);
     }
 
     
@@ -31,7 +31,7 @@ public class HealthbarTEST : MonoBehaviour
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        //ta med i playerscript, kopplar till healthbar script
-        healthBar.SetHealth(currentHealth);
+        //ta med i playerscript, kopplar till UI script
+        uiScript.SetHealth(currentHealth);
     }
 }
