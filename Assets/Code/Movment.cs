@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Movment : MonoBehaviour
 {
-    Rigidbody rb; 
+    public Rigidbody prb; 
 
     [Header("Movment")]
     public float moveSpeed;
@@ -45,7 +45,7 @@ public class Movment : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        prb = GetComponent<Rigidbody>();
         startYScale = transform.localScale.y; 
     }
 
@@ -53,7 +53,7 @@ public class Movment : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeigt * 0.5f + 0.3f, Ground);
 
-        rb.linearDamping = grounded ? groundDrag : 0;
+        prb.linearDamping = grounded ? groundDrag : 0;
 
         PlayerInput();
         SpeedControl();
@@ -117,29 +117,29 @@ public class Movment : MonoBehaviour
 
         if (grounded)
         {
-            rb.AddForce(moveDiraction.normalized * moveSpeed * 10f, ForceMode.Force);
+            prb.AddForce(moveDiraction.normalized * moveSpeed * 10f, ForceMode.Force);
         }
         else
         {
-            rb.AddForce(moveDiraction.normalized * moveSpeed * 10f * airMultipiler, ForceMode.Force);
+            prb.AddForce(moveDiraction.normalized * moveSpeed * 10f * airMultipiler, ForceMode.Force);
         }
     }
 
     private void SpeedControl()
     {
-        Vector3 flatvel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        Vector3 flatvel = new Vector3(prb.linearVelocity.x, 0f, prb.linearVelocity.z);
 
         if (flatvel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatvel.normalized * moveSpeed;
-            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+            prb.linearVelocity = new Vector3(limitedVel.x, prb.linearVelocity.y, limitedVel.z);
         }
     }
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        prb.linearVelocity = new Vector3(prb.linearVelocity.x, 0f, prb.linearVelocity.z);
+        prb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     private void ResetJump()
@@ -152,7 +152,7 @@ public class Movment : MonoBehaviour
         if(state != MovmentState.air)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(-transform.up * 10);
+            prb.AddForce(-transform.up * 10);
         }
     }
 
