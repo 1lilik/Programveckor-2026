@@ -2,73 +2,91 @@ using UnityEngine;
 
 public class Movment : MonoBehaviour
 {
-    public Rigidbody prb; 
+    public Rigidbody rb;
 
-    [Header("Movment")]
-    public float moveSpeed;
+    [Header("Movement")]
     public float walkSpeed;
-    public float sprintSpeed;
     public float jumpForce;
     public float jumpCooldown;
     public float groundDrag;
-    public float airMultipiler;
-    public float startYScale; 
+    public float airMultiplier;
+
+    bool jumpReady = true;
+
+    [Header("Dash")]
+    public float dashDistance;     
+    public float dashSpeed;        
+    public float dashCooldown;
+
+    bool dashReady = true;
+    bool isDashing;
 
     [Header("Ground Check")]
-    public float playerHeigt;
+    public float playerHeight;
     public LayerMask Ground;
     bool grounded;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode dashKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Crouching")]
     public float crouchSpeed;
     public float crouchYScale;
 
-    bool jumpReady = true;
+    float startYScale;
+
     public Transform looking;
+
     float horizontalInput;
     float verticalInput;
-    Vector3 moveDiraction;
-    public MovmentState state;
-    
-    public enum MovmentState
+
+    Vector3 moveDirection;
+    Vector3 dashDirection;
+
+    public MovementState state;
+
+    public enum MovementState
     {
         walking,
-        sprinting,
         crouching,
         air,
+        dashing
     }
 
     private void Start()
     {
-        prb = GetComponent<Rigidbody>();
-        startYScale = transform.localScale.y; 
+        rb = GetComponent<Rigidbody>();
+
+        startYScale = transform.localScale.y;
     }
 
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeigt * 0.5f + 0.3f, Ground);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, Ground);
 
-        prb.linearDamping = grounded ? groundDrag : 0;
+        rb.linearDamping = grounded ? groundDrag : 0f;
 
         PlayerInput();
+        StateHandler();
         SpeedControl();
-        StateHandler(); 
     }
 
     private void FixedUpdate()
     {
-        MovePlayer(); 
+        if (!isDashing)
+        {
+            MovePlayer();
+        }
     }
 
     private void PlayerInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+        moveDirection = looking.forward * verticalInput + looking.right * horizontalInput;
 
         if (Input.GetKey(jumpKey) && jumpReady && grounded)
         {
@@ -77,9 +95,14 @@ public class Movment : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (Input.GetKeyDown(crouchKey))
+        if (Input.GetKeyDown(dashKey) && dashReady && moveDirection.magnitude > 0.1f)
         {
-            StartCrouch(); 
+            Dash();
+        }
+
+        if (Input.GetKeyDown(crouchKey) && grounded)
+        {
+            StartCrouch();
         }
 
         if (Input.GetKeyUp(crouchKey))
@@ -90,56 +113,59 @@ public class Movment : MonoBehaviour
 
     private void StateHandler()
     {
-        if (grounded && Input.GetKey(crouchKey))
+        if (isDashing)
         {
-            state = MovmentState.crouching;
-            moveSpeed = crouchSpeed; 
+            state = MovementState.dashing;
         }
-        else if (grounded && Input.GetKey(sprintKey) && !Input.GetKey(crouchKey))
+        else if (grounded && Input.GetKey(crouchKey))
         {
-            state = MovmentState.sprinting;
-            moveSpeed = sprintSpeed; 
+            state = MovementState.crouching;
         }
         else if (grounded)
         {
-            state = MovmentState.walking;
-            moveSpeed = walkSpeed; 
+            state = MovementState.walking;
         }
         else
         {
-            state = MovmentState.air; 
+            state = MovementState.air;
         }
     }
 
     private void MovePlayer()
     {
-        moveDiraction = looking.forward * verticalInput + looking.right * horizontalInput;
+        if (state == MovementState.crouching)
+        {
+            rb.AddForce(moveDirection.normalized * crouchSpeed * 10f, ForceMode.Force);
+            return;
+        }
 
         if (grounded)
         {
-            prb.AddForce(moveDiraction.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * walkSpeed * 10f, ForceMode.Force);
         }
         else
         {
-            prb.AddForce(moveDiraction.normalized * moveSpeed * 10f * airMultipiler, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * walkSpeed * 10f * airMultiplier, ForceMode.Force);
         }
     }
 
     private void SpeedControl()
     {
-        Vector3 flatvel = new Vector3(prb.linearVelocity.x, 0f, prb.linearVelocity.z);
+        if (isDashing) return;
 
-        if (flatvel.magnitude > moveSpeed)
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        if (flatVel.magnitude > walkSpeed)
         {
-            Vector3 limitedVel = flatvel.normalized * moveSpeed;
-            prb.linearVelocity = new Vector3(limitedVel.x, prb.linearVelocity.y, limitedVel.z);
+            Vector3 limitedVel = flatVel.normalized * walkSpeed;
+            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
     }
 
     private void Jump()
     {
-        prb.linearVelocity = new Vector3(prb.linearVelocity.x, 0f, prb.linearVelocity.z);
-        prb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     private void ResetJump()
@@ -147,18 +173,41 @@ public class Movment : MonoBehaviour
         jumpReady = true;
     }
 
+    private void Dash()
+    {
+        rb.useGravity = false; 
+        dashReady = false;
+        isDashing = true;
+
+        dashDirection = moveDirection.normalized;
+
+        float dashDuration = dashDistance / dashSpeed;
+
+        rb.linearVelocity = dashDirection * dashSpeed;
+
+        Invoke(nameof(EndDash), dashDuration);
+        Invoke(nameof(ResetDash), dashCooldown);
+    }
+
+    private void EndDash()
+    {
+        isDashing = false;
+        rb.useGravity = true;
+    }
+
+    private void ResetDash()
+    {
+        dashReady = true;
+    }
+
     private void StartCrouch()
     {
-        if(state != MovmentState.air)
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            prb.AddForce(-transform.up * 10);
-        }
+        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
     }
 
     private void StopCrouch()
     {
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }
-
 }

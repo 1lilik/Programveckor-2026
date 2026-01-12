@@ -942,21 +942,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e00e880548a5e4b91c884a3fa1dafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movment
-  prb: {fileID: 0}
-  moveSpeed: 0
-  walkSpeed: 12
-  sprintSpeed: 22
+  rb: {fileID: 1945414168}
+  walkSpeed: 18
   jumpForce: 10
   jumpCooldown: 1
   groundDrag: 5
-  airMultipiler: 0.4
-  startYScale: 1
-  playerHeigt: 2
+  airMultiplier: 0
+  dashDistance: 15
+  dashSpeed: 50
+  dashCooldown: 0
+  playerHeight: 2
   Ground:
     serializedVersion: 2
     m_Bits: 1024
   jumpKey: 32
-  sprintKey: 304
+  dashKey: 304
   crouchKey: 306
   crouchSpeed: 6
   crouchYScale: 0.7
