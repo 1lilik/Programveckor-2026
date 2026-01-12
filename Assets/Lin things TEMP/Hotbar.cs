@@ -24,12 +24,14 @@ public class Hotbar : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-
+            slots[0].GetComponent<UnityEngine.UI.Image>().sprite = ActiveSlot;
+            slots[1].GetComponent<UnityEngine.UI.Image>().sprite = InactiveSlot;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-
+            slots[1].GetComponent<UnityEngine.UI.Image>().sprite = ActiveSlot;
+            slots[0].GetComponent<UnityEngine.UI.Image>().sprite = InactiveSlot;
         }
     }
 }
