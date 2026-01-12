@@ -4,6 +4,9 @@ public class Projectile : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
+        if (!other.CompareTag("Trigger"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
