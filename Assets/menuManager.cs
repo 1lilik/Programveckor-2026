@@ -7,6 +7,7 @@ public class menuManager : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject controlsMenu;
     public GameObject pauseMenu;
+    public GameObject audioSettingsMenu;
 
     public void Start()
     {
@@ -19,6 +20,7 @@ public class menuManager : MonoBehaviour
         controlsMenu.SetActive(false);
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(false);
     }
 
     public void ShowControlsMenu() //Show controls menu
@@ -27,6 +29,7 @@ public class menuManager : MonoBehaviour
         controlsMenu.SetActive(true);
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(false);
     }
 
     public void ShowSettingsMenu() //Show settings menu
@@ -35,6 +38,16 @@ public class menuManager : MonoBehaviour
         controlsMenu.SetActive(false);
         settingsMenu.SetActive(true);
         pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(false);
+    }
+
+    public void ShowAudioSettingsMenu()
+    {
+        mainMenu.SetActive(false);
+        controlsMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(true);
     }
 
     public void ShowPauseMenu() //Shows pause menu
@@ -43,6 +56,7 @@ public class menuManager : MonoBehaviour
         controlsMenu.SetActive(false);
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(true);
+        audioSettingsMenu.SetActive(false);
     }
 
     public void ContinueGame()
@@ -51,6 +65,7 @@ public class menuManager : MonoBehaviour
         controlsMenu.SetActive(false);
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(false);
     }
 
     public void StartGame()
