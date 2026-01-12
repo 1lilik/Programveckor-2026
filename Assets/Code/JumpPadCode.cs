@@ -5,7 +5,7 @@ public class JumpPad : MonoBehaviour
     [Header("JumpPad Settings")]
     public Transform targetPosition;
 
-    public float arcHeight = 5f;
+    public float arcHeight;
 
     public float cooldown = 0.5f;
 
