@@ -10,7 +10,7 @@ public abstract class EnemyBase: MonoBehaviour
     public float stopRadius;
     [Header("Stats")]
     public bool ranged;
-    public int health;
+    public float health;
     public int damage;
     public bool attacking = false;
     public float timer = 0;
@@ -22,6 +22,7 @@ public abstract class EnemyBase: MonoBehaviour
     public LayerMask obstructionMask;
     private void Start()
     {
+        obstructionMask = LayerMask.GetMask("Default");
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
         agent.acceleration = acceleration;
@@ -30,9 +31,11 @@ public abstract class EnemyBase: MonoBehaviour
     void Update()
     {
         float currentDist = Vector3.Distance(transform.position, player.transform.position);
+        bool canSeePlayer = HasLineOfSight();
 
-        if (currentDist < stopRadius)
+        if (currentDist < stopRadius && canSeePlayer)
         {
+        
             Vector3 dirToTarget = transform.position - player.transform.position;
             Vector3 retreatPos = transform.position + dirToTarget.normalized * (stopRadius - currentDist);
 
@@ -42,10 +45,11 @@ public abstract class EnemyBase: MonoBehaviour
             }
         }
         else
-        { 
-            agent.SetDestination(player.transform.position);
+        {
+           
             agent.stoppingDistance = stopRadius;
-        } 
+            agent.SetDestination(player.transform.position);
+        }
 
         if (attacking)
         {
@@ -53,4 +57,36 @@ public abstract class EnemyBase: MonoBehaviour
         }
     }
     public abstract void Attack();
+
+    bool HasLineOfSight()
+    {
+        Vector3 origin = transform.position + Vector3.up * 1.5f; // eye height
+        Vector3 target = player.transform.position + Vector3.up * 1.5f;
+
+        Vector3 dir = target - origin;
+        float dist = dir.magnitude;
+
+        if (Physics.Raycast(origin, dir.normalized, out RaycastHit hit, dist, obstructionMask))
+        {
+            // Something blocked the ray
+            return false;
+        }
+
+        return true;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            EnemyDie();
+        }
+
+    }
+
+    void EnemyDie()
+    {
+        Destroy(gameObject);
+    }
 }
