@@ -10,7 +10,7 @@ public abstract class EnemyBase: MonoBehaviour
     public float stopRadius;
     [Header("Stats")]
     public bool ranged;
-    public int health;
+    public float health;
     public int damage;
     public bool attacking = false;
     public float timer = 0;
@@ -73,5 +73,20 @@ public abstract class EnemyBase: MonoBehaviour
         }
 
         return true;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            EnemyDie();
+        }
+
+    }
+
+    void EnemyDie()
+    {
+        Destroy(gameObject);
     }
 }
