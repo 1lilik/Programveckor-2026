@@ -27,6 +27,7 @@ public class Gun : MonoBehaviour
             ammo--;
             Debug.Log(ammo);
             RaycastHit hit;
+            SoundManager.PlaySound(SoundType.PLACEHOLDER1);
             if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~0, QueryTriggerInteraction.Ignore))
             {
                 Debug.Log(hit.transform.name);
