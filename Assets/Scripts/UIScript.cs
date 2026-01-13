@@ -10,9 +10,9 @@ public class UIScript : MonoBehaviour
     public Image fill;
 
     //Ammo counter
-    public int maxAmmo;
     public int currentAmmo;
     public TextMeshProUGUI ammoText;
+    public Gun gunScript;
 
     //Hotbar
     public GameObject[] slots;
@@ -23,9 +23,7 @@ public class UIScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentAmmo = maxAmmo;
-        ammoText.text = "Ammo: " + currentAmmo;
-
+        ammoText.text = "Ammo: " + gunScript.ammo;
 
         //Setting sprites for the hotbarslots when starting the game
         foreach (GameObject slot in slots)
@@ -37,15 +35,9 @@ public class UIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentAmmo > 0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.R))
         {
-            currentAmmo--;
-            ammoText.text = "Ammo: " + currentAmmo;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentAmmo <= 0)
-        {
-            currentAmmo = maxAmmo + 1;
+            ammoText.text = "Ammo: " + gunScript.ammo;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
