@@ -17,7 +17,7 @@ public class Movment : MonoBehaviour
     public float dashDistance;     
     public float dashSpeed;        
     public float dashCooldown;
-    bool dashReady = false; 
+    public bool dashReady = false; 
     bool isDashing;
 
     [Header("Ground Check")]
