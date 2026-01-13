@@ -8,36 +8,51 @@ public class UIScript : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
-
+    public PlayerStats playerStatsScript;
 
     //Ammo counter
-    public int maxAmmo;
     public int currentAmmo;
     public TextMeshProUGUI ammoText;
+    public Gun gunScript;
+
+    //Hotbar
+    public GameObject[] slots;
+    public Sprite InactiveSlot;
+    public Sprite ActiveSlot;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentAmmo = maxAmmo;
-        ammoText.text = "Ammo: " + currentAmmo;
+        ammoText.text = "Ammo: " + gunScript.ammo;
+
+        //Setting sprites for the hotbarslots when starting the game
+        foreach (GameObject slot in slots)
+        {
+            slot.GetComponent<UnityEngine.UI.Image>().sprite = InactiveSlot;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentAmmo > 0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.R))
         {
-            currentAmmo--;
-            ammoText.text = "Ammo: " + currentAmmo;
-
-            Debug.Log(currentAmmo);
+            ammoText.text = "Ammo: " + gunScript.ammo;
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentAmmo <= 0)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            currentAmmo = maxAmmo + 1;
+            slots[0].GetComponent<UnityEngine.UI.Image>().sprite = ActiveSlot;
+            slots[1].GetComponent<UnityEngine.UI.Image>().sprite = InactiveSlot;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            slots[1].GetComponent<UnityEngine.UI.Image>().sprite = ActiveSlot;
+            slots[0].GetComponent<UnityEngine.UI.Image>().sprite = InactiveSlot;
+        }
+
     }
 
     public void SetMaxHealth(int health)
