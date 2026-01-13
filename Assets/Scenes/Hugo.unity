@@ -512,6 +512,7 @@ MonoBehaviour:
   dashDistance: 5
   dashSpeed: 5
   dashCooldown: 3
+  dashReady: 0
   playerHeight: 0
   Ground:
     serializedVersion: 2
@@ -1153,7 +1154,7 @@ GameObject:
   - component: {fileID: 1632361787}
   - component: {fileID: 1632361786}
   m_Layer: 5
-  m_Name: Image
+  m_Name: GunUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
