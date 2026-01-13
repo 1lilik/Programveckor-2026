@@ -48,7 +48,7 @@ public class Gun : MonoBehaviour
 
     void Reload()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && ammo != 15)
         {
             ammo = maxAmmo;
             Debug.Log("Reloaded: " + ammo);
