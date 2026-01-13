@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class Movment : MonoBehaviour
 {
@@ -10,20 +11,26 @@ public class Movment : MonoBehaviour
     public float jumpCooldown;
     public float groundDrag;
     public float airMultiplier;
+    public bool canMove;
 
     bool jumpReady = true;
 
     [Header("Dash")]
-    public float dashDistance;     
-    public float dashSpeed;        
+    public float dashDistance;
+    public float dashSpeed;
     public float dashCooldown;
-    public bool dashReady = false; 
+    public bool dashReady = false;
+    bool airDash;
     bool isDashing;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask Ground;
     bool grounded;
+
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+    RaycastHit slopeHit;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -57,7 +64,7 @@ public class Movment : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+        rb.freezeRotation = true;
         startYScale = transform.localScale.y;
     }
 
@@ -70,6 +77,15 @@ public class Movment : MonoBehaviour
         PlayerInput();
         StateHandler();
         SpeedControl();
+
+        if (OnSlope() && !isDashing)
+        {
+            rb.useGravity = false;
+        }
+        else
+        {
+            rb.useGravity = true;
+        }
     }
 
     private void FixedUpdate()
@@ -82,31 +98,42 @@ public class Movment : MonoBehaviour
 
     private void PlayerInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        moveDirection = looking.forward * verticalInput + looking.right * horizontalInput;
-
-        if (Input.GetKey(jumpKey) && jumpReady && grounded)
+        if (canMove == true)
         {
-            jumpReady = false;
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(dashKey) && dashReady && moveDirection.magnitude > 0.1f)
-        {
-            Dash();
-        }
+            moveDirection = looking.forward * verticalInput + looking.right * horizontalInput;
 
-        if (Input.GetKeyDown(crouchKey) && grounded)
-        {
-            StartCrouch();
-        }
+            if (Input.GetKey(jumpKey) && jumpReady && grounded)
+            {
+                jumpReady = false;
+                Jump();
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
 
-        if (Input.GetKeyUp(crouchKey))
-        {
-            StopCrouch();
+            if (Input.GetKeyDown(dashKey) && dashReady && moveDirection.magnitude > 0.1f)
+            {
+                if (!grounded && airDash)
+                {
+                    Dash();
+                    airDash = false;
+                }
+                else if (grounded)
+                {
+                    Dash();
+                }
+            }
+
+            if (Input.GetKeyDown(crouchKey) && grounded)
+            {
+                StartCrouch();
+            }
+
+            if (Input.GetKeyUp(crouchKey))
+            {
+                StopCrouch();
+            }
         }
     }
 
@@ -119,10 +146,14 @@ public class Movment : MonoBehaviour
         else if (grounded && Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
+            airDash = true;
+            canMove = true;
         }
         else if (grounded)
         {
             state = MovementState.walking;
+            airDash = true;
+            canMove = true;
         }
         else
         {
@@ -132,19 +163,26 @@ public class Movment : MonoBehaviour
 
     private void MovePlayer()
     {
+        Vector3 direction;
+
+        if (OnSlope())
+            direction = GetSlopeMoveDirection(moveDirection);
+        else
+            direction = moveDirection.normalized;
+
         if (state == MovementState.crouching)
         {
-            rb.AddForce(moveDirection.normalized * crouchSpeed * 10f, ForceMode.Force);
+            rb.AddForce(direction * crouchSpeed * 10f, ForceMode.Force);
             return;
         }
 
         if (grounded)
         {
-            rb.AddForce(moveDirection.normalized * walkSpeed * 10f, ForceMode.Force);
+            rb.AddForce(direction * walkSpeed * 10f, ForceMode.Force);
         }
         else
         {
-            rb.AddForce(moveDirection.normalized * walkSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(direction * walkSpeed * 10f * airMultiplier, ForceMode.Force);
         }
     }
 
@@ -174,12 +212,11 @@ public class Movment : MonoBehaviour
 
     private void Dash()
     {
-        rb.useGravity = false; 
+        rb.useGravity = false;
         dashReady = false;
         isDashing = true;
 
         dashDirection = moveDirection.normalized;
-
         float dashDuration = dashDistance / dashSpeed;
 
         rb.linearVelocity = dashDirection * dashSpeed;
@@ -209,12 +246,35 @@ public class Movment : MonoBehaviour
     {
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down,
+            out slopeHit, playerHeight * 0.5f + 0.5f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == ("Dash Power Up"))
+        if (other.CompareTag("Dash Power Up"))
         {
             dashReady = true;
-            Destroy(other.gameObject); 
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("JumpPad"))
+        {
+            canMove = false;
+            Debug.Log("YES");
         }
     }
 }
