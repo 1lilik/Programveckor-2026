@@ -8,6 +8,7 @@ public class UIScript : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+    public PlayerStats playerStatsScript;
 
     //Ammo counter
     public int currentAmmo;
