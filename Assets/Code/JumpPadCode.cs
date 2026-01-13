@@ -4,71 +4,72 @@ public class JumpPad : MonoBehaviour
 {
     [Header("JumpPad Settings")]
     public Transform targetPosition;
-
-    public float arcHeight;
-
+    public float arcHeight = 5f;
     public float cooldown = 0.5f;
 
     private bool onCooldown;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (onCooldown) return;
-        if (!collision.gameObject.CompareTag("Player")) return;
+        if (!other.CompareTag("Player")) return;
 
-        Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
-        if (rb == null) return;
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if (!rb) return;
 
-        if (targetPosition == null)
+        if (!targetPosition)
         {
-            Debug.LogError("JumpPad: Target Position is not assigned.");
+            Debug.LogError("JumpPad: Target Position not assigned.");
             return;
         }
 
         Launch(rb);
     }
 
-    void Launch(Rigidbody rb)
+    private void Launch(Rigidbody rb)
     {
         onCooldown = true;
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        Vector3 launchVelocity = CalculateLaunchVelocity(
+        Vector3 velocity = CalculateLaunchVelocity(
             rb.position,
             targetPosition.position,
             arcHeight
         );
 
-        rb.AddForce(launchVelocity, ForceMode.VelocityChange);
+        rb.AddForce(velocity, ForceMode.VelocityChange);
 
         Invoke(nameof(ResetCooldown), cooldown);
     }
 
-    void ResetCooldown()
+    private void ResetCooldown()
     {
         onCooldown = false;
     }
-
-    Vector3 CalculateLaunchVelocity(Vector3 start, Vector3 end, float arcHeight)
+    Vector3 CalculateLaunchVelocity(Vector3 start, Vector3 end, float height)
     {
-        float gravity = Physics.gravity.y;
+        float gravity = Physics.gravity.y; 
 
-        Vector3 displacement = end - start;
-        Vector3 displacementXZ = new Vector3(displacement.x, 0f, displacement.z);
+        float apexY = Mathf.Max(start.y, end.y) + height;
 
-        float horizontalDistance = displacementXZ.magnitude;
+        float displacementUp = apexY - start.y;
+        float displacementDown = apexY - end.y;
 
-        float time = Mathf.Max(0.1f, horizontalDistance / 10f);
+        float velocityY = Mathf.Sqrt(-2f * gravity * displacementUp);
 
-        float minVerticalTime = Mathf.Sqrt(-2f * arcHeight / gravity) * 2f;
-        time = Mathf.Max(time, minVerticalTime);
+        float timeUp = velocityY / -gravity;
+        float timeDown = Mathf.Sqrt(2f * displacementDown / -gravity);
+        float totalTime = timeUp + timeDown;
 
-        Vector3 velocityXZ = displacementXZ / time;
+        Vector3 displacementXZ = new Vector3(
+            end.x - start.x,
+            0f,
+            end.z - start.z
+        );
 
-        float velocityY =
-            (displacement.y - 0.5f * gravity * time * time) / time;
+        Vector3 velocityXZ = displacementXZ / totalTime;
 
         return velocityXZ + Vector3.up * velocityY;
     }
