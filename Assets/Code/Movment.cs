@@ -17,8 +17,7 @@ public class Movment : MonoBehaviour
     public float dashDistance;     
     public float dashSpeed;        
     public float dashCooldown;
-
-    bool dashReady = true;
+    bool dashReady = false; 
     bool isDashing;
 
     [Header("Ground Check")]
@@ -209,5 +208,13 @@ public class Movment : MonoBehaviour
     private void StopCrouch()
     {
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == ("Dash Power Up"))
+        {
+            dashReady = true;
+            Destroy(other.gameObject); 
+        }
     }
 }
