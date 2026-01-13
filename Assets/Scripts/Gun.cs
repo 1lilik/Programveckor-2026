@@ -9,6 +9,8 @@ public class Gun : MonoBehaviour
 
     public Camera fpsCam;
 
+    public Animator animator;
+
     // Update is called once per frame
     void Update()
     {
@@ -21,6 +23,7 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0)
         {
+            animator.SetTrigger("Shoot");
             ammo--;
             Debug.Log(ammo);
             RaycastHit hit;
