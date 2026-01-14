@@ -14,7 +14,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (GameObject.Find("Player"))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }
