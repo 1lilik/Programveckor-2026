@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 81073844}
   - component: {fileID: 81073843}
   - component: {fileID: 81073842}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 153382612}
   - component: {fileID: 153382611}
   - component: {fileID: 153382610}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2481,7 +2481,7 @@ Transform:
   m_GameObject: {fileID: 299709711}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 19.3, z: -53.6}
+  m_LocalPosition: {x: 0.5, y: 19.3, z: -208.53928}
   m_LocalScale: {x: 68.61431, y: 0.4316, z: 47.91423}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2682,7 +2682,7 @@ GameObject:
   - component: {fileID: 1075784980}
   - component: {fileID: 1075784979}
   - component: {fileID: 1075784978}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3389,7 +3389,7 @@ GameObject:
   - component: {fileID: 1895407107}
   - component: {fileID: 1895407106}
   - component: {fileID: 1895407105}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3625,16 +3625,18 @@ MonoBehaviour:
   jumpCooldown: 1
   groundDrag: 5
   airMultiplier: 0.4
-  canMove: 0
+  canMove: 1
   dashDistance: 15
   dashSpeed: 50
   dashCooldown: 0
   dashReady: 0
   playerHeight: 2
-  Ground:
+  Default:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1
   maxSlopeAngle: 60
+  slopeStickForce: 40
+  maxSlopeSpeedMultiplier: 4.5
   jumpKey: 32
   dashKey: 304
   crouchKey: 306
@@ -3679,7 +3681,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 975906959767552007, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
       propertyPath: arcHeight
-      value: 10
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 975906959767552007, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
+      propertyPath: travelTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755213945666140220, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.865
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755213945666140220, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755213945666140220, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -15.3
       objectReference: {fileID: 0}
     - target: {fileID: 3964180319381365755, guid: 55e3eadb639084f40b3a81f6fb2794e9, type: 3}
       propertyPath: m_Name

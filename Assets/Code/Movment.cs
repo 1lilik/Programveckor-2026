@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 public class Movment : MonoBehaviour
 {
@@ -11,25 +10,28 @@ public class Movment : MonoBehaviour
     public float jumpCooldown;
     public float groundDrag;
     public float airMultiplier;
-    public bool canMove;
+    public bool canMove = true;
 
     bool jumpReady = true;
+    bool exitSlope = false;
 
     [Header("Dash")]
     public float dashDistance;
     public float dashSpeed;
     public float dashCooldown;
-    public bool dashReady = false;
+    public bool dashReady;
     bool airDash;
     bool isDashing;
 
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask Ground;
+    public LayerMask Default;
     bool grounded;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
+    public float slopeStickForce;
+    public float maxSlopeSpeedMultiplier;
     RaycastHit slopeHit;
 
     [Header("Keybinds")]
@@ -66,124 +68,104 @@ public class Movment : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         startYScale = transform.localScale.y;
+        canMove = true;
     }
 
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, Ground);
-
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, Default);
         rb.linearDamping = grounded ? groundDrag : 0f;
+
+        if (!canMove) return;
 
         PlayerInput();
         StateHandler();
         SpeedControl();
 
-        if (OnSlope() && !isDashing)
-        {
-            rb.useGravity = false;
-        }
-        else
-        {
-            rb.useGravity = true;
-        }
+        rb.useGravity = !isDashing;
     }
 
     private void FixedUpdate()
     {
-        if (!isDashing)
-        {
-            MovePlayer();
-        }
+        if (!canMove || isDashing) return;
+        MovePlayer();
     }
 
     private void PlayerInput()
     {
-        if (canMove == true)
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        moveDirection = looking.forward * verticalInput + looking.right * horizontalInput;
+
+        if (Input.GetKey(jumpKey) && jumpReady && grounded)
         {
-            horizontalInput = Input.GetAxisRaw("Horizontal");
-            verticalInput = Input.GetAxisRaw("Vertical");
+            jumpReady = false;
+            Jump();
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
 
-            moveDirection = looking.forward * verticalInput + looking.right * horizontalInput;
-
-            if (Input.GetKey(jumpKey) && jumpReady && grounded)
+        if (Input.GetKeyDown(dashKey) && dashReady && moveDirection.magnitude > 0.1f)
+        {
+            if (!grounded && airDash)
             {
-                jumpReady = false;
-                Jump();
-                Invoke(nameof(ResetJump), jumpCooldown);
+                Dash();
+                airDash = false;
             }
-
-            if (Input.GetKeyDown(dashKey) && dashReady && moveDirection.magnitude > 0.1f)
+            else if (grounded)
             {
-                if (!grounded && airDash)
-                {
-                    Dash();
-                    airDash = false;
-                }
-                else if (grounded)
-                {
-                    Dash();
-                }
-            }
-
-            if (Input.GetKeyDown(crouchKey) && grounded)
-            {
-                StartCrouch();
-            }
-
-            if (Input.GetKeyUp(crouchKey))
-            {
-                StopCrouch();
+                Dash();
             }
         }
+
+        if (Input.GetKeyDown(crouchKey) && grounded)
+            StartCrouch();
+
+        if (Input.GetKeyUp(crouchKey))
+            StopCrouch();
     }
 
     private void StateHandler()
     {
         if (isDashing)
-        {
             state = MovementState.dashing;
-        }
         else if (grounded && Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
             airDash = true;
-            canMove = true;
         }
         else if (grounded)
         {
             state = MovementState.walking;
             airDash = true;
-            canMove = true;
         }
         else
-        {
             state = MovementState.air;
-        }
     }
 
     private void MovePlayer()
     {
-        Vector3 direction;
-
-        if (OnSlope())
-            direction = GetSlopeMoveDirection(moveDirection);
-        else
-            direction = moveDirection.normalized;
-
-        if (state == MovementState.crouching)
+        if (OnSlope() && !exitSlope && moveDirection.magnitude < 0.1f)
         {
-            rb.AddForce(direction * crouchSpeed * 10f, ForceMode.Force);
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
             return;
         }
 
-        if (grounded)
-        {
-            rb.AddForce(direction * walkSpeed * 10f, ForceMode.Force);
-        }
+        Vector3 direction = OnSlope() && !exitSlope
+            ? GetSlopeMoveDirection(moveDirection)
+            : moveDirection.normalized;
+
+        float slopeMultiplier = GetUphillSlopeMultiplier();
+
+        if (state == MovementState.crouching)
+            rb.AddForce(direction * crouchSpeed * 10f * slopeMultiplier, ForceMode.Force);
+        else if (grounded)
+            rb.AddForce(direction * walkSpeed * 10f * slopeMultiplier, ForceMode.Force);
         else
-        {
             rb.AddForce(direction * walkSpeed * 10f * airMultiplier, ForceMode.Force);
-        }
+
+        if (OnSlope() && grounded && moveDirection.magnitude > 0.1f && !exitSlope)
+            rb.AddForce(Vector3.down * slopeStickForce, ForceMode.Force);
     }
 
     private void SpeedControl()
@@ -192,15 +174,40 @@ public class Movment : MonoBehaviour
 
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-        if (flatVel.magnitude > walkSpeed)
+        float maxSpeed = walkSpeed * GetUphillSlopeMultiplier();
+
+        if (flatVel.magnitude > maxSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * walkSpeed;
+            Vector3 limitedVel = flatVel.normalized * maxSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
+
+        if (OnSlope() && rb.linearVelocity.y > 0f && !exitSlope)
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+    }
+
+    private float GetUphillSlopeMultiplier()
+    {
+        if (!OnSlope() || !MovingUphill() || exitSlope)
+        {
+            return 1f;
+        }
+
+        float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
+        float t = slopeAngle / maxSlopeAngle;
+
+        return Mathf.Lerp(1f, maxSlopeSpeedMultiplier, t * t);
+    }
+
+    private bool MovingUphill()
+    {
+        Vector3 slopeDir = GetSlopeMoveDirection(moveDirection);
+        return Vector3.Dot(slopeDir, Vector3.down) < 0f;
     }
 
     private void Jump()
     {
+        exitSlope = true;
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
@@ -208,11 +215,11 @@ public class Movment : MonoBehaviour
     private void ResetJump()
     {
         jumpReady = true;
+        exitSlope = false;
     }
 
     private void Dash()
     {
-        rb.useGravity = false;
         dashReady = false;
         isDashing = true;
 
@@ -228,7 +235,6 @@ public class Movment : MonoBehaviour
     private void EndDash()
     {
         isDashing = false;
-        rb.useGravity = true;
     }
 
     private void ResetDash()
@@ -249,8 +255,7 @@ public class Movment : MonoBehaviour
 
     private bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down,
-            out slopeHit, playerHeight * 0.5f + 0.5f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.5f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
@@ -270,11 +275,20 @@ public class Movment : MonoBehaviour
             dashReady = true;
             Destroy(other.gameObject);
         }
+    }
 
-        if (other.CompareTag("JumpPad"))
-        {
-            canMove = false;
-            Debug.Log("YES");
-        }
+    public void DisableMovement(float duration)
+    {
+        canMove = false;
+        isDashing = false;
+        rb.useGravity = true;
+
+        CancelInvoke(nameof(EnableMovement));
+        Invoke(nameof(EnableMovement), duration);
+    }
+
+    private void EnableMovement()
+    {
+        canMove = true;
     }
 }
