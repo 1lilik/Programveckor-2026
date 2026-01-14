@@ -3,16 +3,30 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    EnemyBase enemybaseScript;
-    PlayerStats playerStatsScript;
+    private EnemyBase enemybaseScript;
+    private PlayerStats playerStatsScript;
+    private GameObject player;
 
+
+    private void Awake()
+    {
+        player = GameObject.Find("Player");
+        enemybaseScript = GetComponent<EnemyBase>();
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Trigger"))
+        playerStatsScript = player.GetComponent<PlayerStats>();
+        if (other.CompareTag("Player"))
         {
+            playerStatsScript.TakeDamage(10);
             Destroy(gameObject);
 
-            playerStatsScript.TakeDamage(enemybaseScript.damage);
+          
+        }
+
+        else if (!other.CompareTag("Trigger"))
+        {
+            Destroy(gameObject);
         }
     }
 
