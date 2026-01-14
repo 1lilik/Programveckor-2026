@@ -16,11 +16,12 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         playerStatsScript = player.GetComponent<PlayerStats>();
-        if (!other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
+            playerStatsScript.TakeDamage(10);
             Destroy(gameObject);
 
-            playerStatsScript.TakeDamage(10);
+          
         }
 
         if (!other.CompareTag("Trigger"))
