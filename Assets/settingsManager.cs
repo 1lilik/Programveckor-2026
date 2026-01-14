@@ -28,6 +28,7 @@ public class settingsManager : MonoBehaviour
         sfxVolumeSlider.minValue = 0;
         sfxVolumeSlider.maxValue = 1;
 
+        //Makes sure the sliders uses decimals
         masterVolumeSlider.wholeNumbers = false;
         musicVolumeSlider.wholeNumbers = false;
         sfxVolumeSlider.wholeNumbers = false;
@@ -68,7 +69,8 @@ public class settingsManager : MonoBehaviour
     }
     public void ApplyMute(bool isMuted)
     {
-        if (isMuted)
+        // Sets all volume to -80dB if muted == true
+        if (isMuted) 
         {
             audioMixer.SetFloat("masterVolume", -80f);
             audioMixer.SetFloat("musicVolume", -80f);

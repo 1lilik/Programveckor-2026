@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 public class menuManager : MonoBehaviour
 {
+    // --Menu panels--
     public GameObject mainMenu;
     public GameObject settingsMenu;
     public GameObject controlsMenu;
@@ -10,6 +11,7 @@ public class menuManager : MonoBehaviour
     public GameObject audioSettingsMenu;
     public GameObject controlSettingsMenu;
     public GameObject languageMenu;
+    public AudioClip buttonClick;
 
     public void Start() //Shows the main menu on start
     {
@@ -71,7 +73,7 @@ public class menuManager : MonoBehaviour
         languageMenu.SetActive(false);
     }
 
-    public void ShowLanguageMenu()
+    public void ShowLanguageMenu() //Shows the language menu
     {
         mainMenu.SetActive(false);
         controlsMenu.SetActive(false);
@@ -91,6 +93,8 @@ public class menuManager : MonoBehaviour
         audioSettingsMenu.SetActive(false);
         controlSettingsMenu.SetActive(false);
         languageMenu.SetActive(false);
+        Time.timeScale = 0f; // Pauses the game by setting time to 0f
+        Debug.Log("Game paused"); //Tells that the game is paused
     }
 
     public void ContinueGame() //Disables the pause menu
@@ -102,6 +106,8 @@ public class menuManager : MonoBehaviour
         audioSettingsMenu.SetActive(false);
         controlSettingsMenu.SetActive(false);
         languageMenu.SetActive(false);
+        Time.timeScale = 1f; // Un-pauses the game by re-setting time to 1f
+        Debug.Log("Game no longer paused"); //Tells that the game is no longer paused
     }
 
     public void StartGame() //Loads the game scene
@@ -119,7 +125,7 @@ public class menuManager : MonoBehaviour
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            ShowPauseMenu();
+            ShowPauseMenu();           
         }
     }
 }
