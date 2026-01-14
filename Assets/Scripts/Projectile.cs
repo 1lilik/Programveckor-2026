@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
           
         }
 
-        if (!other.CompareTag("Trigger"))
+        else if (!other.CompareTag("Trigger"))
         {
             Destroy(gameObject);
         }
