@@ -81,6 +81,7 @@ public abstract class EnemyBase: MonoBehaviour
         if (health <= 0)
         {
             EnemyDie();
+            SoundManager.PlaySound(SoundType.PLACEHOLDER2);
         }
 
     }
