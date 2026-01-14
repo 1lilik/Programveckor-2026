@@ -632,11 +632,6 @@ MonoBehaviour:
   currentAmmo: 0
   ammoText: {fileID: 2067627903}
   gunScript: {fileID: 266352698}
-  slots:
-  - {fileID: 1115091433}
-  - {fileID: 1236989667}
-  InactiveSlot: {fileID: 21300000, guid: f0141f8e933712d4e9dd8b752daeda7b, type: 3}
-  ActiveSlot: {fileID: 21300000, guid: 80057a820f4522442964bf117dec5a20, type: 3}
 --- !u!1 &398246140
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,6 +1240,7 @@ GameObject:
   - component: {fileID: 1398252858}
   - component: {fileID: 1398252857}
   - component: {fileID: 1398252863}
+  - component: {fileID: 1398252864}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1297,6 +1293,7 @@ MonoBehaviour:
   jumpCooldown: 1
   groundDrag: 1
   airMultiplier: 2
+  canMove: 0
   dashDistance: 5
   dashSpeed: 5
   dashCooldown: 3
@@ -1305,6 +1302,7 @@ MonoBehaviour:
   Ground:
     serializedVersion: 2
     m_Bits: 1024
+  maxSlopeAngle: 0
   jumpKey: 32
   dashKey: 304
   crouchKey: 306
@@ -1423,6 +1421,28 @@ MonoBehaviour:
   health: 0
   maxHealth: 100
   uiScript: {fileID: 375540685}
+--- !u!95 &1398252864
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398252856}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1287d6f743c54644b8444ed0471a6b12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1459169709
 GameObject:
   m_ObjectHideFlags: 0
