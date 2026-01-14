@@ -169,17 +169,17 @@
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize.Cube",
-                "value": "{\"m_Value\":{\"x\":-2.929443359375,\"y\":0.49997711181640627,\"z\":-28.24908447265625}}"
+                "value": "{\"m_Value\":{\"x\":22.28753662109375,\"y\":0.9417190551757813,\"z\":-3.77685546875}}"
             },
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize.Stairs",
-                "value": "{\"m_Value\":{\"x\":5.400575160980225,\"y\":6.471450328826904,\"z\":-5.717169761657715}}"
+                "value": "{\"m_Value\":{\"x\":7.45550537109375,\"y\":13.850112915039063,\"z\":-7.688232421875}}"
             },
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize.Cylinder",
-                "value": "{\"m_Value\":{\"x\":-1.616729736328125,\"y\":3.042492389678955,\"z\":4.887815475463867}}"
+                "value": "{\"m_Value\":{\"x\":-6.0,\"y\":17.18317413330078,\"z\":6.0}}"
             },
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
@@ -189,7 +189,7 @@
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize.Door",
-                "value": "{\"m_Value\":{\"x\":-20.86279296875,\"y\":5.014869689941406,\"z\":-8.542236328125}}"
+                "value": "{\"m_Value\":{\"x\":6.2293701171875,\"y\":7.148887634277344,\"z\":-6.7545166015625}}"
             },
             {
                 "type": "UnityEngine.Quaternion, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
@@ -199,7 +199,7 @@
             {
                 "type": "UnityEngine.Quaternion, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastRotation.Stairs",
-                "value": "{\"m_Value\":{\"x\":-0.4999999403953552,\"y\":0.4999999403953552,\"z\":-0.4999999403953552,\"w\":-0.4999999403953552}}"
+                "value": "{\"m_Value\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0}}"
             },
             {
                 "type": "UnityEngine.Quaternion, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",

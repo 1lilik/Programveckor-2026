@@ -9,6 +9,8 @@ public class Gun : MonoBehaviour
 
     public Camera fpsCam;
 
+    public Animator animator;
+
     // Update is called once per frame
     void Update()
     {
@@ -21,9 +23,11 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0)
         {
+            animator.SetTrigger("Shoot");
             ammo--;
             Debug.Log(ammo);
             RaycastHit hit;
+            SoundManager.PlaySound(SoundType.PLACEHOLDER1);
             if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~0, QueryTriggerInteraction.Ignore))
             {
                 Debug.Log(hit.transform.name);
@@ -45,7 +49,7 @@ public class Gun : MonoBehaviour
 
     void Reload()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && ammo != 15)
         {
             ammo = maxAmmo;
             Debug.Log("Reloaded: " + ammo);

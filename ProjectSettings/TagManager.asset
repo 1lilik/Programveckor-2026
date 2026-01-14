@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - JumpPad
+  - Dash Power Up
   layers:
   - Default
   - TransparentFX
