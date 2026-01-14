@@ -15,12 +15,13 @@ public class UIScript : MonoBehaviour
     public TextMeshProUGUI ammoText;
     public Gun gunScript;
 
+    //Weapon
+    public GameObject weaponUI;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ammoText.text = "Ammo: " + gunScript.ammo;
-
+        weaponUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,5 +50,9 @@ public class UIScript : MonoBehaviour
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 
+    public void ActivateWeapon()
+    {
+        weaponUI.SetActive(true);
+    }
 
 }
