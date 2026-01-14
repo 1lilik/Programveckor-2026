@@ -20,6 +20,18 @@ public class settingsManager : MonoBehaviour
         float sfx = PlayerPrefs.GetFloat("sfxVolume", 1f);
         bool muted = PlayerPrefs.GetInt("mute", 0) == 1;
 
+        // First set sliders
+        masterVolumeSlider.minValue = 0;
+        masterVolumeSlider.maxValue = 1;
+        musicVolumeSlider.minValue = 0;
+        musicVolumeSlider.maxValue = 1;
+        sfxVolumeSlider.minValue = 0;
+        sfxVolumeSlider.maxValue = 1;
+
+        masterVolumeSlider.wholeNumbers = false;
+        musicVolumeSlider.wholeNumbers = false;
+        sfxVolumeSlider.wholeNumbers = false;
+
         masterVolumeSlider.value = master;
         musicVolumeSlider.value = music;
         sfxVolumeSlider.value = sfx;
@@ -40,16 +52,19 @@ public class settingsManager : MonoBehaviour
     {
         audioMixer.SetFloat("masterVolume", Mathf.Log10(Mathf.Max(value, 0.001f)) * 20);
         PlayerPrefs.SetFloat("masterVolume", value);
+        Debug.Log("Master volume:" + value);
     }
     public void ApplyMusicVolume(float value)
     {
         audioMixer.SetFloat("musicVolume", Mathf.Log10(Mathf.Max(value, 0.001f)) * 20);
         PlayerPrefs.SetFloat("musicVolume", value);
+        Debug.Log("Music volume:" + value);
     }
     public void ApplySfxVolume(float value)
     {
         audioMixer.SetFloat("sfxVolume", Mathf.Log10(Mathf.Max(value, 0.001f)) * 20);
         PlayerPrefs.SetFloat("sfxVolume", value);
+        Debug.Log("Sfx volume:" + value);
     }
     public void ApplyMute(bool isMuted)
     {
@@ -72,5 +87,6 @@ public class settingsManager : MonoBehaviour
     {
         GameSettings.sensitivity = value;
         PlayerPrefs.SetFloat("Sensitivity", value);
+        Debug.Log("Sensitivity:" + value);
     }
 }
