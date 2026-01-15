@@ -79,7 +79,10 @@ public class Movment : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, layerMaskWhatIsGround);
         rb.linearDamping = grounded ? groundDrag : 0f;
 
-        if (!canMove) return;
+        if (!canMove)
+        {
+            return;
+        }
 
         PlayerInput();
         StateHandler();
@@ -122,16 +125,24 @@ public class Movment : MonoBehaviour
         }
 
         if (Input.GetKeyDown(crouchKey) && grounded)
+        {
             StartCrouch();
-
+        }
+        
         if (Input.GetKeyUp(crouchKey))
+        {
             StopCrouch();
+        }
+            
     }
 
     private void StateHandler()
     {
         if (isDashing)
+        {
             state = MovementState.dashing;
+        }
+            
         else if (grounded && Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
@@ -143,7 +154,9 @@ public class Movment : MonoBehaviour
             airDash = true;
         }
         else
+        {
             state = MovementState.air;
+        }
     }
 
     private void MovePlayer()
@@ -161,19 +174,32 @@ public class Movment : MonoBehaviour
         float slopeMultiplier = GetUphillSlopeMultiplier();
 
         if (state == MovementState.crouching)
+        {
             rb.AddForce(direction * crouchSpeed * 10f * slopeMultiplier, ForceMode.Force);
+        }
+     
         else if (grounded)
+        {
             rb.AddForce(direction * walkSpeed * 10f * slopeMultiplier, ForceMode.Force);
-        else
-            rb.AddForce(direction * walkSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
 
+        else
+        {
+            rb.AddForce(direction * walkSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
+            
         if (OnSlope() && grounded && moveDirection.magnitude > 0.1f && !exitSlope)
+        {
             rb.AddForce(Vector3.down * slopeStickForce, ForceMode.Force);
+        }
     }
 
     private void SpeedControl()
     {
-        if (isDashing) return;
+        if (isDashing)
+        {
+            return;
+        }
 
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
@@ -186,7 +212,9 @@ public class Movment : MonoBehaviour
         }
 
         if (OnSlope() && rb.linearVelocity.y > 0f && !exitSlope)
+        {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        }
     }
 
     private float GetUphillSlopeMultiplier()
