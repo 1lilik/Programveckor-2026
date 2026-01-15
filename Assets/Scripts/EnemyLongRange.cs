@@ -8,12 +8,10 @@ public class EnemyLongRange : EnemyBase
 
     public override void Attack()
     {
-        SoundManager.PlaySound(SoundType.PLACEHOLDER3);
         timer += Time.deltaTime;
         if (timer >= attackTimer)
         {
             GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-            SoundManager.PlaySound(SoundType.PLACEHOLDER3);
             Vector3 direction = (player.transform.position - transform.position).normalized;
 
          

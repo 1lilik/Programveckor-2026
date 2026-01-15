@@ -7,7 +7,6 @@ public class EnemyCloseRange : EnemyBase
     private PlayerStats playerStats;
     public override void Attack()
     {
-        SoundManager.PlaySound(SoundType.PLACEHOLDER3);
         playerStats = player.GetComponent<PlayerStats>();
         timer += Time.deltaTime;
         if (timer >= attackTimer)
