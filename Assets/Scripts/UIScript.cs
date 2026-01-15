@@ -14,7 +14,7 @@ public class UIScript : MonoBehaviour
     public int currentAmmo;
     public TextMeshProUGUI ammoText;
     public Gun gunScript;
-    public GameObject ammoTextFix;
+    public GameObject ammoTextActivate;
 
     //Weapon
     public GameObject weaponUI;
@@ -24,7 +24,7 @@ public class UIScript : MonoBehaviour
     void Start()
     {
         weaponUI.SetActive(false);
-        ammoTextFix.SetActive(false);
+        ammoTextActivate.SetActive(false);
         weaponImage.SetActive(false);
     }
 
@@ -56,7 +56,7 @@ public class UIScript : MonoBehaviour
 
     public void ActivateWeapon()
     {
-        ammoTextFix.SetActive(true);
+        ammoTextActivate.SetActive(true);
         weaponUI.SetActive(true);
         weaponImage.SetActive(true);
     }
