@@ -32,5 +32,6 @@ public class SoundManager : MonoBehaviour
     public static void PlaySound(SoundType sound, float volume = 1)
     {
         instance.audioSource.PlayOneShot(instance.soundlist[(int)sound], volume);
+        Debug.Log("Ljud bra" + sound.ToString());
     }
 }

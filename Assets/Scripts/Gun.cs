@@ -11,9 +11,15 @@ public class Gun : MonoBehaviour
 
     public Animator animator;
 
+    bool haveGun = false;
+    public WeaponPickup weaponPickupScript;
+    public UIScript uiScript;
+
+
     // Update is called once per frame
     void Update()
     {
+        ActivateWeapon();
         Shoot();
         Reload();
     }
@@ -21,7 +27,7 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0 && haveGun == true)
         {
             animator.SetTrigger("Shoot");
             ammo--;
@@ -49,10 +55,19 @@ public class Gun : MonoBehaviour
 
     void Reload()
     {
-        if (Input.GetKeyDown(KeyCode.R) && ammo != 15)
+        if (Input.GetKeyDown(KeyCode.R) && ammo != 15 && haveGun == true)
         {
             ammo = maxAmmo;
             Debug.Log("Reloaded: " + ammo);
+        }
+    }
+
+    void ActivateWeapon()
+    {
+        if (!weaponPickupScript.isActiveAndEnabled)
+        {
+            haveGun = true;
+            uiScript.ActivateWeapon();
         }
     }
 }

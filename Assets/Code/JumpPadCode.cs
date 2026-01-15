@@ -2,75 +2,60 @@ using UnityEngine;
 
 public class JumpPad : MonoBehaviour
 {
-    [Header("JumpPad Settings")]
     public Transform targetPosition;
     public float arcHeight = 5f;
-    public float cooldown = 0.5f;
-
-    private bool onCooldown;
+    public float travelTime = 1.0f;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (onCooldown) return;
-        if (!other.CompareTag("Player")) return;
-
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (!rb) return;
-
-        if (!targetPosition)
+        if (!other.CompareTag("Player"))
         {
-            Debug.LogError("JumpPad: Target Position not assigned.");
             return;
         }
 
-        Launch(rb);
+        Movment movement = other.GetComponent<Movment>();
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+
+        if (!movement || !rb || !targetPosition)
+        {
+            return;
+        }
+
+        StopAllCoroutines();
+        StartCoroutine(JumpPadRoutine(other.transform, rb, movement));
     }
 
-    private void Launch(Rigidbody rb)
+    private System.Collections.IEnumerator JumpPadRoutine(
+        Transform player,
+        Rigidbody rb,
+        Movment movement)
     {
-        onCooldown = true;
+        movement.canMove = false;
 
+        rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
 
-        Vector3 velocity = CalculateLaunchVelocity(
-            rb.position,
-            targetPosition.position,
-            arcHeight
-        );
+        Vector3 start = player.position;
+        Vector3 end = targetPosition.position;
 
-        rb.AddForce(velocity, ForceMode.VelocityChange);
+        float time = 0f;
 
-        Invoke(nameof(ResetCooldown), cooldown);
-    }
+        while (time < travelTime)
+        {
+            float t = time / travelTime;
 
-    private void ResetCooldown()
-    {
-        onCooldown = false;
-    }
-    Vector3 CalculateLaunchVelocity(Vector3 start, Vector3 end, float height)
-    {
-        float gravity = Physics.gravity.y; 
+            Vector3 pos = Vector3.Lerp(start, end, t);
+            pos.y += arcHeight * Mathf.Sin(Mathf.PI * t);
 
-        float apexY = Mathf.Max(start.y, end.y) + height;
+            player.position = pos;
 
-        float displacementUp = apexY - start.y;
-        float displacementDown = apexY - end.y;
+            time += Time.deltaTime;
+            yield return null;
+        }
 
-        float velocityY = Mathf.Sqrt(-2f * gravity * displacementUp);
+        player.position = end;
 
-        float timeUp = velocityY / -gravity;
-        float timeDown = Mathf.Sqrt(2f * displacementDown / -gravity);
-        float totalTime = timeUp + timeDown;
-
-        Vector3 displacementXZ = new Vector3(
-            end.x - start.x,
-            0f,
-            end.z - start.z
-        );
-
-        Vector3 velocityXZ = displacementXZ / totalTime;
-
-        return velocityXZ + Vector3.up * velocityY;
+        rb.isKinematic = false;
+        movement.canMove = true;
     }
 }

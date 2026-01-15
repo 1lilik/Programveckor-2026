@@ -12,6 +12,7 @@ public class EnemyCloseRange : EnemyBase
         if (timer >= attackTimer)
         {
             playerStats.TakeDamage(10);
+            SoundManager.PlaySound(SoundType.PLACEHOLDER3);
             timer = 0; 
         }
 

@@ -54,7 +54,7 @@ public abstract class EnemyBase: MonoBehaviour
         if (attacking)
         {
             Attack();
-            SoundManager.PlaySound(SoundType.PLACEHOLDER3);
+            
         }
     }
     public abstract void Attack();
@@ -81,8 +81,8 @@ public abstract class EnemyBase: MonoBehaviour
         health -= amount;
         if (health <= 0)
         {
-            EnemyDie();
             SoundManager.PlaySound(SoundType.PLACEHOLDER2);
+            EnemyDie();
         }
 
     }
