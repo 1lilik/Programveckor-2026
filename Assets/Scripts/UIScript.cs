@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ public class UIScript : MonoBehaviour
     public string[] objectives;
     public TextMeshProUGUI objectivesText;
 
+      public List<DestroyableBox> boxes = new List<DestroyableBox>();
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,7 +45,6 @@ public class UIScript : MonoBehaviour
         {
             ammoText.text = "Ammo: " + gunScript.ammo;
         }
-
     }
 
     public void SetMaxHealth(int health)
@@ -66,7 +68,7 @@ public class UIScript : MonoBehaviour
         ammoTextActivate.SetActive(true);
         weaponUI.SetActive(true);
         weaponImage.SetActive(true);
-        objectivesText.text = "Objective: " + objectives[2];
     }
 
+  
 }

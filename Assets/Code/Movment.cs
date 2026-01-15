@@ -24,6 +24,8 @@ public class Movment : MonoBehaviour
     bool isDashing;
     bool haveDash;
 
+    public UIScript uiScript;
+
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask Default;
@@ -275,7 +277,8 @@ public class Movment : MonoBehaviour
         {
             haveDash = true;
             dashReady = true;
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
+            uiScript.objectivesText.text = "Objective:" + uiScript.objectives[0];
         }
     }
 

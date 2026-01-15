@@ -4,6 +4,8 @@ public class DestroyableBox : MonoBehaviour
 {
 
     public float health = 1f;
+    public UIScript uiScript;
+
 
     public void TakeDamage(float amount)
     {
@@ -16,7 +18,7 @@ public class DestroyableBox : MonoBehaviour
 
     void Break()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
 }

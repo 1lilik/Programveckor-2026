@@ -40,4 +40,28 @@ public class PlayerStats : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "JumpPad 1")
+        {
+            uiScript.objectivesText.text = "Objective: " + uiScript.objectives[1];
+            Debug.Log("Touched 1 " + other.name);
+        }
+        else if (other.gameObject.name == "JumpPad 2")
+        {
+            uiScript.objectivesText.text = "Objective: " + uiScript.objectives[3];
+            Debug.Log("Touched 2 " + other.name);
+        }
+        else if (other.gameObject.name == "JumpPad 3")
+        {
+            uiScript.objectivesText.text = "Objective: " + uiScript.objectives[5];
+            Debug.Log("Touched 3 " + other.name);
+        }
+        else if (other.gameObject.name == "JumpPad 4")
+        {
+            uiScript.objectivesText.text = "Objective: " + uiScript.objectives[6];
+            Debug.Log("Touched 2 " + other.name);
+        }
+    }
+
 }
