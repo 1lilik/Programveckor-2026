@@ -6,12 +6,7 @@ public class PlayerStats : MonoBehaviour
 {
     public int health;
     public int maxHealth = 100;
-    public UIScript uiScript;
-
-    public GameObject closeRangeEnemies;
-
-    public List<EnemyCloseRange> SpawnedEnemiesClose = new List<EnemyCloseRange>();
-    public List<EnemyLongRange> SpawnedEnemiesLong = new List<EnemyLongRange>();
+    public UIScript uiScript;   
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,8 +14,6 @@ public class PlayerStats : MonoBehaviour
     {
         health = maxHealth;
         uiScript.SetMaxHealth(health);
-        
-
         
     }
 
@@ -70,14 +63,6 @@ public class PlayerStats : MonoBehaviour
         {
             uiScript.objectivesText.text = "Objective: " + uiScript.objectives[6];
             Debug.Log("Touched 2 " + other.name);
-        }
-
-        if (other.gameObject.CompareTag("Trigger"))
-        {
-            
-
-
-            Debug.Log("Spawned enemies: " + SpawnedEnemiesClose.Count + SpawnedEnemiesLong.Count);
         }
         
     }

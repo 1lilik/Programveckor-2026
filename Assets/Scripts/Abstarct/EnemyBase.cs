@@ -4,6 +4,10 @@ using UnityEngine.AI;
 
 public abstract class EnemyBase: MonoBehaviour
 {
+    int enemyCount;
+
+
+
     [Header ("Movement")]
     public int speed;
     public int acceleration;
@@ -57,6 +61,8 @@ public abstract class EnemyBase: MonoBehaviour
             Attack();
             
         }
+
+        enemyCount = 0;
     }
     public abstract void Attack();
 
@@ -90,7 +96,7 @@ public abstract class EnemyBase: MonoBehaviour
 
     public void EnemyDie()
     {
-
+        enemyCount++;
         Destroy(gameObject);
     }
 }
