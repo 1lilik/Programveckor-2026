@@ -22,6 +22,7 @@ public class Movment : MonoBehaviour
     public bool dashReady;
     bool airDash;
     bool isDashing;
+    bool haveDash;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -272,6 +273,7 @@ public class Movment : MonoBehaviour
     {
         if (other.CompareTag("Dash Power Up"))
         {
+            haveDash = true;
             dashReady = true;
             Destroy(other.gameObject);
         }
