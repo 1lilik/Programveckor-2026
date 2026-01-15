@@ -31,4 +31,13 @@ public class PlayerStats : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Death")
+        {
+            health = 0;
+            Destroy(gameObject);
+        }
+    }
 }

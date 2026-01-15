@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         player = GameObject.Find("Player");
+        SoundManager.PlaySound(SoundType.PLACEHOLDER3);
         enemybaseScript = GetComponent<EnemyBase>();
     }
     private void OnTriggerEnter(Collider other)
