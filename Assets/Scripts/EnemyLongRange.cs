@@ -8,7 +8,7 @@ public class EnemyLongRange : EnemyBase
 
     public override void Attack()
     {
-       
+        SoundManager.PlaySound(SoundType.PLACEHOLDER3);
         timer += Time.deltaTime;
         if (timer >= attackTimer)
         {
