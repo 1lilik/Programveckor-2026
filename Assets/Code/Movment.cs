@@ -28,7 +28,7 @@ public class Movment : MonoBehaviour
 
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask Default;
+    public LayerMask layerMaskWhatIsGround;
     bool grounded;
 
     [Header("Slope Handling")]
@@ -76,7 +76,7 @@ public class Movment : MonoBehaviour
 
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, Default);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, layerMaskWhatIsGround);
         rb.linearDamping = grounded ? groundDrag : 0f;
 
         if (!canMove) return;

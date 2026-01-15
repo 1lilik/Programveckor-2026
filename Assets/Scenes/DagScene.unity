@@ -3630,6 +3630,7 @@ MonoBehaviour:
   dashSpeed: 50
   dashCooldown: 0
   dashReady: 0
+  uiScript: {fileID: 0}
   playerHeight: 2
   Default:
     serializedVersion: 2
