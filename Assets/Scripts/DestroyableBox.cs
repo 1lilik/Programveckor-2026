@@ -18,6 +18,7 @@ public class DestroyableBox : MonoBehaviour
 
     void Break()
     {
+        uiScript.BoxDestroyed(this);
         gameObject.SetActive(false);
     }
 

@@ -9,7 +9,7 @@ public class DashPowerUp : MonoBehaviour
         if (GameObject.Find("Player"))
         {
             uiScript.objectivesText.text = "Objective" + uiScript.objectives[0];
-            //gameObject.SetActive(false);
+           
         }
     }
 }

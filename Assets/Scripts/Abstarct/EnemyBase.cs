@@ -27,6 +27,7 @@ public abstract class EnemyBase: MonoBehaviour
         agent.speed = speed;
         agent.acceleration = acceleration;
         player = GameObject.FindGameObjectWithTag("Player");
+
     }
     void Update()
     {
@@ -87,8 +88,9 @@ public abstract class EnemyBase: MonoBehaviour
 
     }
 
-    void EnemyDie()
+    public void EnemyDie()
     {
+
         Destroy(gameObject);
     }
 }

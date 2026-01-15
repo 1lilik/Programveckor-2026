@@ -25,8 +25,9 @@ public class UIScript : MonoBehaviour
     //Objective
     public string[] objectives;
     public TextMeshProUGUI objectivesText;
-
-      public List<DestroyableBox> boxes = new List<DestroyableBox>();
+    public List<DestroyableBox> boxes = new List<DestroyableBox>();
+    bool canShowMessage = true;
+  
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -70,5 +71,15 @@ public class UIScript : MonoBehaviour
         weaponImage.SetActive(true);
     }
 
+    public void BoxDestroyed (DestroyableBox box)
+    {
+        boxes.Remove(box);
+
+        if (boxes.Count == 0 & canShowMessage == true)
+        {
+            objectivesText.text = "Objective: " + objectives[0];
+            canShowMessage = false;
+        }
+    }
   
 }
