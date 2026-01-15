@@ -68,7 +68,6 @@ public class Gun : MonoBehaviour
         {
             haveGun = true;
             uiScript.ActivateWeapon();
-            Debug.Log(haveGun);
         }
     }
 }

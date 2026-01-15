@@ -14,14 +14,18 @@ public class UIScript : MonoBehaviour
     public int currentAmmo;
     public TextMeshProUGUI ammoText;
     public Gun gunScript;
+    public GameObject ammoTextFix;
 
     //Weapon
     public GameObject weaponUI;
+    public GameObject weaponImage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         weaponUI.SetActive(false);
+        ammoTextFix.SetActive(false);
+        weaponImage.SetActive(false);
     }
 
     // Update is called once per frame
@@ -52,7 +56,9 @@ public class UIScript : MonoBehaviour
 
     public void ActivateWeapon()
     {
+        ammoTextFix.SetActive(true);
         weaponUI.SetActive(true);
+        weaponImage.SetActive(true);
     }
 
 }
