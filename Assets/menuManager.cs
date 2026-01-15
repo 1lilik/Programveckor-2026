@@ -11,6 +11,7 @@ public class menuManager : MonoBehaviour
     public GameObject audioSettingsMenu;
     public GameObject controlSettingsMenu;
     public GameObject languageMenu;
+    public GameObject gameOverMenu;
     public AudioClip buttonClick;
 
     public void Start() //Shows the main menu on start
@@ -97,6 +98,18 @@ public class menuManager : MonoBehaviour
         Debug.Log("Game paused"); //Tells that the game is paused
     }
 
+    public void ShowGameOverMenu()
+    {
+        mainMenu.SetActive(false);
+        controlsMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        audioSettingsMenu.SetActive(false);
+        controlSettingsMenu.SetActive(false);
+        languageMenu.SetActive(false);
+        gameOverMenu.SetActive(true);
+    }
+
     public void ContinueGame() //Disables the pause menu
     {
         mainMenu.SetActive(false);
@@ -128,4 +141,6 @@ public class menuManager : MonoBehaviour
             ShowPauseMenu();           
         }
     }
+
+   
 }
