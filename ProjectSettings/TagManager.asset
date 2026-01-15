@@ -8,6 +8,7 @@ TagManager:
   - JumpPad
   - Dash Power Up
   - Death
+  - Trigger
   layers:
   - Default
   - TransparentFX
@@ -20,8 +21,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - Box
+  - Skybox
   - 
   - 
   - 
