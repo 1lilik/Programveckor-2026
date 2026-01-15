@@ -13,7 +13,7 @@ public class EnemyLongRange : EnemyBase
         if (timer >= attackTimer)
         {
             GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-          
+            SoundManager.PlaySound(SoundType.PLACEHOLDER3);
             Vector3 direction = (player.transform.position - transform.position).normalized;
 
          
