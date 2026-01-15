@@ -14,6 +14,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (GameObject.Find("Player"))
         {
+            SoundManager.PlaySound(SoundType.PLACEHOLDER4);
             gameObject.SetActive(false);
         }
     }
