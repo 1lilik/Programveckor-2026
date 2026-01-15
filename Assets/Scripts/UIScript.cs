@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,12 +21,18 @@ public class UIScript : MonoBehaviour
     public GameObject weaponUI;
     public GameObject weaponImage;
 
+    //Objective
+    public string[] objectives;
+    public TextMeshProUGUI objectivesText;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         weaponUI.SetActive(false);
         ammoTextActivate.SetActive(false);
         weaponImage.SetActive(false);
+        objectivesText.text = "Objective: " + objectives[0];
     }
 
     // Update is called once per frame
@@ -59,6 +66,7 @@ public class UIScript : MonoBehaviour
         ammoTextActivate.SetActive(true);
         weaponUI.SetActive(true);
         weaponImage.SetActive(true);
+        objectivesText.text = "Objective: " + objectives[2];
     }
 
 }
