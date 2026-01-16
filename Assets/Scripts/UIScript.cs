@@ -22,6 +22,12 @@ public class UIScript : MonoBehaviour
     public GameObject weaponUI;
     public GameObject weaponImage;
 
+    //Player Icon
+    public GameObject playerIcon;
+    public GameObject playerIconImage;
+    public Animator playerAnimator;
+    public Animation playerAnimation;
+
     //Objective
     public string[] objectives;
     public TextMeshProUGUI objectivesText;
@@ -37,11 +43,15 @@ public class UIScript : MonoBehaviour
         ammoTextActivate.SetActive(false);
         weaponImage.SetActive(false);
         objectivesText.text = "Objective: " + objectives[0];
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        playerAnimator.Play("Player Icon");
+
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.R))
         {
             ammoText.text = "Ammo: " + gunScript.ammo;
