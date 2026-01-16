@@ -238,6 +238,7 @@ public class Movment : MonoBehaviour
 
     private void Jump()
     {
+        SoundManager.PlaySound(SoundType.PLACEHOLDER7);
         exitSlope = true;
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -251,6 +252,7 @@ public class Movment : MonoBehaviour
 
     private void Dash()
     {
+        SoundManager.PlaySound(SoundType.PLACEHOLDER6);
         dashReady = false;
         isDashing = true;
 
