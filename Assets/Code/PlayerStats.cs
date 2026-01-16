@@ -31,8 +31,9 @@ public class PlayerStats : MonoBehaviour
 
         if (health <= 0)
         {
+            Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("Seb's Scene");
-          
+         
             
         }
     }
@@ -42,7 +43,9 @@ public class PlayerStats : MonoBehaviour
         if (collision.gameObject.tag == "Death")
         {
             health = 0;
-            SceneManager.LoadScene("Seb's Scene");
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Seb's Scene"); 
+
 
         }
     }
