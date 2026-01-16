@@ -86,7 +86,7 @@ public class menuManager : MonoBehaviour
 
     public void StartGame() //Loads the game scene
     {
-        SceneManager.LoadScene("GameScene"); //Change ("GameScene") to actual scene name later
+        SceneManager.LoadScene("Play Test"); //Change ("GameScene") to actual scene name later
     }
 
     public void QuitGame() //Quits the application
