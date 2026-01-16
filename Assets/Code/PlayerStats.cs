@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -30,7 +31,9 @@ public class PlayerStats : MonoBehaviour
 
         if (health <= 0)
         {
-            Destroy(gameObject);
+            SceneManager.LoadScene("Seb's Scene");
+          
+            
         }
     }
 
@@ -39,7 +42,8 @@ public class PlayerStats : MonoBehaviour
         if (collision.gameObject.tag == "Death")
         {
             health = 0;
-            Destroy(gameObject);
+            SceneManager.LoadScene("Seb's Scene");
+
         }
     }
     private void OnTriggerEnter(Collider other)
