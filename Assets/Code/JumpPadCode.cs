@@ -31,7 +31,7 @@ public class JumpPad : MonoBehaviour
         Movment movement)
     {
         movement.canMove = false;
-
+        SoundManager.PlaySound(SoundType.PLACEHOLDER5);
         rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
 
