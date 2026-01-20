@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
 
     public Animator animator;
 
-    bool haveGun = false;
+    public bool haveGun = false;
     public WeaponPickup weaponPickupScript;
     public UIScript uiScript;
 
@@ -29,7 +29,8 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0 && haveGun == true)
         {
-            animator.SetTrigger("Shoot");
+            animator.Play("Shooting");
+            Debug.Log("Animation played");
             ammo--;
             Debug.Log(ammo);
             RaycastHit hit;

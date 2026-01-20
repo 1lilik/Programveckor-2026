@@ -22,6 +22,7 @@ public class UIScript : MonoBehaviour
     public GameObject weaponUI;
     public GameObject weaponImage;
 
+
     //Player Icon
     public GameObject playerIcon;
     public GameObject playerIconImage;
@@ -55,6 +56,11 @@ public class UIScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.R))
         {
             ammoText.text = "Ammo: " + gunScript.ammo;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && gunScript.ammo > 0 && gunScript.haveGun == true)
+        {
+
         }
     }
 
