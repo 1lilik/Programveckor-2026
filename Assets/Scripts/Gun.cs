@@ -29,7 +29,7 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && ammo > 0 && haveGun == true)
         {
-            animator.Play("Shooting");
+            animator.SetTrigger("Shooting");
             Debug.Log("Animation played");
             ammo--;
             Debug.Log(ammo);

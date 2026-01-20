@@ -53526,7 +53526,7 @@ MonoBehaviour:
   maxAmmo: 15
   ammo: 15
   fpsCam: {fileID: 2083240560}
-  animator: {fileID: 359599281}
+  animator: {fileID: 795072604}
   haveGun: 0
   weaponPickupScript: {fileID: 440972653}
   uiScript: {fileID: 1287932638}
